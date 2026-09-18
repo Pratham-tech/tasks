@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Welcome to Task manager (using streams)");
-        Datamanager dataManager = new Datamanager("./data/data.txt");
+        Datamanager dataManager = new Datamanager("./data/data.txt"); //relative path
         ArrayList<Task> tasksData = dataManager.loadData();
 
         System.out.println("Printing all data ...");
@@ -23,10 +23,11 @@ public class Main {
         printDeadlineUsingStreams(tasksData);
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
-        ArrayList<Task> filteredList = filterTasksByString(tasksData, "10");
-        System.out.println("Filtered tasks:");
-        printAllData(filteredList);
+        System.out.println("Total number of deadlines (using streams): " + countDeadlinesUsingStreams(tasksData));
+
     }
+
+
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
         int count = 0;
@@ -67,4 +68,25 @@ public class Main {
                 .collect(toList());
         return filteredList;
     }
+
+    public static void printAllDataUsingStreams(ArrayList<Task> tasksData) {
+        tasksData.stream()
+                .filter(task -> task instanceof Deadline)
+                .forEach(System.out::println);
+            }
+        
+
+    public static void printDeadlinesUsingStreams(ArrayList<Task> tasksData) {
+        tasksData.stream()
+                .filter(task -> task instanceof Deadline)
+                .forEach(System.out::println);
+            }  
+    
+
+    private static int countDeadlinesUsingStreams(ArrayList<Task> tasksData) {
+        return (int) tasksData.stream()
+                .filter(task -> task instanceof Deadline)
+                .count();
+    }
 }
+
