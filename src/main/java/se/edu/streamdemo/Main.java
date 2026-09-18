@@ -3,6 +3,8 @@ package se.edu.streamdemo;
 import se.edu.streamdemo.data.Datamanager;
 import se.edu.streamdemo.task.Deadline;
 import se.edu.streamdemo.task.Task;
+import se.edu.streamdemo.task.TaskComparator;
+import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,7 @@ public class Main {
 
         System.out.println("Printing deadlines ...");
         printDeadlines(tasksData);
+        printDeadlineUsingStreams(tasksData);
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
         System.out.println("Total number of deadlines (using streams): " + countDeadlinesUsingStreams(tasksData));
@@ -50,6 +53,22 @@ public class Main {
         }
     }
 
+    public static void printDeadlineUsingStreams(ArrayList<Task> tasks) {
+        System.out.println("Using streams...");
+        tasks.stream()
+                .filter(t -> t instanceof Deadline)
+                .sorted((t1, t2) -> t1.getDescription().compareToIgnoreCase(t2.getDescription()))
+                .forEach(System.out::println);
+    }
+
+    public static ArrayList<Task> filterTasksByString(ArrayList<Task> tasks, String filterString) {
+        System.out.println("Using streams...");
+        ArrayList<Task> filteredList = (ArrayList<Task>) tasks.stream()
+                .filter(t -> t.getDescription().contains(filterString))
+                .collect(toList());
+        return filteredList;
+    }
+
     public static void printAllDataUsingStreams(ArrayList<Task> tasksData) {
         tasksData.stream()
                 .filter(task -> task instanceof Deadline)
@@ -70,3 +89,4 @@ public class Main {
                 .count();
     }
 }
+
